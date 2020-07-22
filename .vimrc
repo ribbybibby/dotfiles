@@ -50,6 +50,7 @@ Plug 'juliosueiras/vim-terraform-completion'
 Plug 'tsandall/vim-rego'
 Plug 'Chiel92/vim-autoformat'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'JamshedVesuna/vim-markdown-preview'
 call plug#end()
 
 filetype plugin indent on
@@ -185,3 +186,7 @@ au BufWritePre *.rego Autoformat
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 autocmd BufWritePre *.markdown,*.md,*.mdown,*.mkd,*.mkdn call prettier#Autoformat()
+
+"" markdown preview
+let vim_markdown_preview_hotkey='<C-m>'
+let vim_markdown_preview_github=1
