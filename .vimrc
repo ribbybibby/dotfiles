@@ -180,3 +180,8 @@ let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_verbosemode = 1
 au BufWritePre *.rego Autoformat
+
+"" prettier
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
+autocmd BufWritePre *.markdown,*.md,*.mdown,*.mkd,*.mkdn call prettier#Autoformat()
