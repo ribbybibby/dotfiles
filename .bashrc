@@ -20,6 +20,76 @@ parse_kube_context() {
     echo "($(kubectl config current-context))"
 }
 
+# kf derives kubectl arguments from PWD, assuming your code is arranged in the
+# form:
+#  <manifests>/<cluster>/<namespace>/manifests.yaml
+kf() {
+  cluster=""
+  flags=""
+
+  if [[ "${PWD}" == ${KUBERNETES_MANIFEST_PATH}* ]]; then
+    if [[ $(grep "cluster: ${PWD##*/}" ${HOME}/.kube/config) ]]; then
+      cluster=${PWD##*/}
+      flags="--context=${PWD##*/}"
+    else
+      namespace=${PWD##*/}
+      cluster=$(dirname ${PWD} | sed "s|^$KUBERNETES_MANIFEST_PATH/||g")
+
+      if [[ -d "${KUBERNETES_MANIFEST_PATH}/${cluster}" ]]; then
+        flags="${flags} --context=${cluster}"
+      fi
+
+      if [[ -d "${KUBERNETES_MANIFEST_PATH}/${cluster}/${namespace}" ]]; then
+        flags="${flags} -n ${namespace}"
+      fi
+    fi
+  fi
+
+  echo "${flags}"
+}
+
+# k runs kubectl with arguments derived from PWD, assuming your code is
+# arranged in the form:
+#  <manifests>/<cluster>/<namespace>/manifests.yaml
+k() {
+  flags=$(kf)
+  (set -x; kubectl ${flags} $@)
+}
+
+# s runs stern with arguments derived from PWD, assuming your code is
+# arranged in the form:
+#  <manifests>/<cluster>/<namespace>/manifests.yaml
+s() {
+  flags=$(kf)
+  (set -x; stern ${flags} $@)
+}
+
+# a changes kubectl context before running argocd. The context is dervied from
+# PWD, assuming your code is arranged in the form:
+#  <manifests>/<cluster>/<namespace>/manifests.yaml
+a() {
+  if [[ "${PWD}" == ${KUBERNETES_MANIFEST_PATH}* ]]; then
+    if [[ $(grep "cluster: ${PWD##*/}" ${HOME}/.kube/config) ]]; then
+      context="${PWD##*/}"
+    else
+      cluster=$(dirname ${PWD} | sed "s|^$KUBERNETES_MANIFEST_PATH/||g")
+
+      if [[ -d "${KUBERNETES_MANIFEST_PATH}/${cluster}" ]]; then
+        context="${cluster}"
+      fi
+    fi
+  fi
+
+
+  if [[ ! -z "${context}" ]]; then
+    current_context=$(kubectl config current-context)
+    trap "kubectl config use-context ${current_context} > /dev/null" EXIT
+    kubectl config use-context ${context} > /dev/null
+  fi
+
+  (set -x; argocd $@)
+}
+
 # Make my terminal look fancy
 export PS1="\[\033[38;5;11m\]\$(parse_git_branch)\[$(tput sgr0)\]\[\033[38;5;15m\]::\[\033[38;5;10m\]\$(parse_kube_context)\[$(tput sgr0)\]\[\033[38;5;15m\]::\[$(tput sgr0)\]\[\033[38;5;45m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\] [\[$(tput sgr0)\]\[\033[38;5;104m\]\t\[$(tput sgr0)\]\[\033[38;5;15m\]] [\[$(tput sgr0)\]\[\033[38;5;79m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]]\n{\[$(tput sgr0)\]\[\033[38;5;202m\]\$?\[$(tput sgr0)\]\[\033[38;5;15m\]}::\\$ \[$(tput sgr0)\]"
 
