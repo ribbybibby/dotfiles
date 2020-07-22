@@ -53,7 +53,8 @@ kf() {
 #  <manifests>/<cluster>/<namespace>/manifests.yaml
 k() {
   flags=$(kf)
-  (set -x; kubectl ${flags} $@)
+  echo "kubectl ${flags} $@"
+  kubectl ${flags} $@
 }
 
 # s runs stern with arguments derived from PWD, assuming your code is
@@ -61,7 +62,8 @@ k() {
 #  <manifests>/<cluster>/<namespace>/manifests.yaml
 s() {
   flags=$(kf)
-  (set -x; stern ${flags} $@)
+  echo "+ stern ${flags} $@"
+  stern ${flags} $@
 }
 
 # a changes kubectl context before running argocd. The context is dervied from
@@ -80,14 +82,14 @@ a() {
     fi
   fi
 
-
   if [[ ! -z "${context}" ]]; then
     current_context=$(kubectl config current-context)
     trap "kubectl config use-context ${current_context} > /dev/null" EXIT
     kubectl config use-context ${context} > /dev/null
   fi
 
-  (set -x; argocd $@)
+  echo "+ argocd $@"
+  argocd $@
 }
 
 # Make my terminal look fancy
