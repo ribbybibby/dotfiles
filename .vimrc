@@ -5,6 +5,7 @@ set nocompatible
 syntax enable
 set t_Co=256
 
+" install plugins
 call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-gitgutter'
 Plug 'austintaylor/vim-indentobject'
@@ -46,6 +47,9 @@ Plug 'scrooloose/syntastic'
 Plug 'vim-syntastic/syntastic'
 Plug 'hashivim/vim-terraform'
 Plug 'juliosueiras/vim-terraform-completion'
+Plug 'tsandall/vim-rego'
+Plug 'Chiel92/vim-autoformat'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 call plug#end()
 
 filetype plugin indent on
@@ -118,17 +122,21 @@ set nocursorline
 set nowritebackup
 set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
 
+" VSCode color scheme
 set background=dark
 colorscheme codedark
 
+" Overwrite the tab color set by codedark to be a less distracting grey
+highlight SpecialKey ctermfg=8
+
+" Map Ctrl+n to nerd tree
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
-let g:terraform_align=1
-let g:terraform_fmt_on_save=1
+" go autocomplete
+call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 
 " Syntastic Config
 set statusline+=%#warningmsg#
@@ -139,6 +147,10 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+"" terraform
+let g:terraform_align=1
+let g:terraform_fmt_on_save=1
 
 " (Optional)Remove Info(Preview) window
 set completeopt-=preview
@@ -161,3 +173,10 @@ call deoplete#custom#option('omni_patterns', {
 \ 'terraform': '[^ *\t"{=$]\w*',
 \})
 
+"" opa
+let g:formatdef_rego = '"opa fmt"'
+let g:formatters_rego = ['rego']
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_verbosemode = 1
+au BufWritePre *.rego Autoformat
