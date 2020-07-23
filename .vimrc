@@ -175,7 +175,7 @@ call deoplete#custom#option('omni_patterns', {
 \})
 
 "" opa
-let g:formatdef_rego = '"opa fmt"'
+let g:formatdef_rego = '"opa fmt | sed -e \"s|\t|  |g\""'
 let g:formatters_rego = ['rego']
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
