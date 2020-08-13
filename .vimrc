@@ -87,6 +87,9 @@ if exists('$TMUX')  " Support resizing in tmux
   set ttymouse=xterm2
 endif
 
+" leader
+let mapleader = ','
+
 " plugin settings
 let g:ctrlp_match_window = 'order:ttb,max:20'
 let g:NERDSpaceDelims=1
@@ -117,6 +120,15 @@ endif
 
 " Don't copy the contents of an overwritten selection.
 vnoremap p "_dP
+
+" Don't cut with d
+nnoremap x "_x
+nnoremap d "_d
+nnoremap D "_D
+vnoremap d "_d
+nnoremap <leader>d ""d
+nnoremap <leader>D ""D
+vnoremap <leader>d ""d
 
 set autowrite
 set nocursorline
@@ -185,7 +197,6 @@ au BufWritePre *.rego Autoformat
 "" prettier
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
-autocmd BufWritePre *.markdown,*.md,*.mdown,*.mkd,*.mkdn call prettier#Autoformat()
 
 "" markdown preview
 let vim_markdown_preview_hotkey='<C-m>'
