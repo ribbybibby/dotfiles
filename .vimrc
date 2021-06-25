@@ -5,6 +5,12 @@ set nocompatible
 syntax enable
 set t_Co=256
 
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " install plugins
 call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-gitgutter'
@@ -201,3 +207,7 @@ let g:prettier#autoformat_require_pragma = 0
 "" markdown preview
 let vim_markdown_preview_hotkey='<C-m>'
 let vim_markdown_preview_github=1
+
+let g:snipMate = { 'snippet_version' : 1 }
+
+set colorcolumn=72
