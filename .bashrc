@@ -96,7 +96,7 @@ a() {
 export PS1="\[\033[38;5;11m\]\$(parse_git_branch)\[$(tput sgr0)\]\[\033[38;5;15m\]::\[\033[38;5;10m\]\$(parse_kube_context)\[$(tput sgr0)\]\[\033[38;5;15m\]::\[$(tput sgr0)\]\[\033[38;5;45m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\] [\[$(tput sgr0)\]\[\033[38;5;104m\]\t\[$(tput sgr0)\]\[\033[38;5;15m\]] [\[$(tput sgr0)\]\[\033[38;5;79m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]]\n{\[$(tput sgr0)\]\[\033[38;5;202m\]\$?\[$(tput sgr0)\]\[\033[38;5;15m\]}::\\$ \[$(tput sgr0)\]"
 
 # Sort path out
-export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"

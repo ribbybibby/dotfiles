@@ -210,4 +210,4 @@ let vim_markdown_preview_github=1
 
 let g:snipMate = { 'snippet_version' : 1 }
 
-set colorcolumn=72
+set colorcolumn=80
