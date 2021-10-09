@@ -57,6 +57,7 @@ Plug 'tsandall/vim-rego'
 Plug 'Chiel92/vim-autoformat'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 filetype plugin indent on
@@ -65,7 +66,7 @@ set autoindent
 set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
 set backspace=2                                              " Fix broken backspace in some setups
 set backupcopy=yes                                           " see :help crontab
-set clipboard=unnamed                                        " yank and paste with the system clipboard
+set clipboard=unnamedplus                                    " yank and paste with the system clipboard
 set directory-=.                                             " don't store swapfiles in the current directory
 set encoding=utf-8
 set expandtab                                                " expand tabs to spaces
@@ -156,6 +157,12 @@ let g:deoplete#enable_at_startup = 1
 
 " go autocomplete
 call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+let g:go_highlight_diagnostic_errors = 1
+let g:go_highlight_diagnostic_warnings = 1
+let g:go_diagnostics_level = 2
+au filetype go inoremap <buffer> . .<C-x><C-o>
 
 " Syntastic Config
 set statusline+=%#warningmsg#

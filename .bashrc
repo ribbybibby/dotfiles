@@ -53,7 +53,7 @@ kf() {
 #  <manifests>/<cluster>/<namespace>/manifests.yaml
 k() {
   flags=$(kf)
-  echo "kubectl ${flags} $@"
+  echo "kubectl ${flags} $@" >&2
   kubectl ${flags} $@
 }
 
@@ -110,6 +110,8 @@ if [ -f ~/Downloads/google-cloud-sdk/completion.bash.inc ]; then . ~/Downloads/g
 
 # Open newsboat
 alias newsboat="docker run -it --rm -v $HOME/.newsboat:/root/.newsboat froulet/docker-newsboat"
+
+alias ncat=nc
 
 # Source local additions from another file
 source ~/.bashrc.local
